@@ -6,14 +6,13 @@ import type { Task } from "../types/task";
 interface Props {
   task: Task;
   onEdit: (task: Task) => void;
-  cardNumber: number;
 }
 
-const TaskCard = ({ task, onEdit, cardNumber }: Props) => {
+const TaskCard = ({ task, onEdit }: Props) => {
   const { state, dispatch } = useTaskContext();
   const [open, setOpen] = useState(false);
 
-  // Proper assignee handling
+  // Assignee display logic
   let assigneeDisplay = "Unassigned";
 
   if (state.loadingUsers) {
@@ -32,16 +31,9 @@ const TaskCard = ({ task, onEdit, cardNumber }: Props) => {
     <>
       <div className="bg-white p-4 rounded shadow space-y-2">
 
-        {/* Title + Card Number */}
-        <div className="flex justify-between items-start">
-          <h3 className="font-semibold text-lg">
-            {task.title}
-          </h3>
-
-          <span className="text-xs bg-gray-200 px-2 py-1 rounded">
-            #{cardNumber}
-          </span>
-        </div>
+        <h3 className="font-semibold text-lg">
+          {task.title}
+        </h3>
 
         {task.description && (
           <p className="text-sm text-gray-600">

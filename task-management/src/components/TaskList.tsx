@@ -18,7 +18,7 @@ const TaskList = ({ onEdit }: Props) => {
   const [priorityFilter, setPriorityFilter] =
     useState<Priority | "All">("All");
 
-  // Debounce (300ms)
+  // Debounce search (300ms)
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
