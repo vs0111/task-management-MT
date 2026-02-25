@@ -5,7 +5,7 @@ export interface Task {
   id: string;
   title: string;
   description: string;
-  priority: Priority;
-  status: Status;
-  assignee: string;
+  priority: Priority | "";
+  status: Status | "";
+  assignee: number | "";
 }
