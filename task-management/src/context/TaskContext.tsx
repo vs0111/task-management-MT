@@ -33,7 +33,6 @@ const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_TASK":
       return { ...state, tasks: [...state.tasks, action.payload] };
-
     case "UPDATE_TASK":
       return {
         ...state,
@@ -41,22 +40,17 @@ const reducer = (state: State, action: Action): State => {
           t.id === action.payload.id ? action.payload : t
         ),
       };
-
     case "DELETE_TASK":
       return {
         ...state,
         tasks: state.tasks.filter((t) => t.id !== action.payload),
       };
-
     case "SET_USERS":
       return { ...state, users: action.payload };
-
     case "SET_LOADING":
       return { ...state, loadingUsers: action.payload };
-
     case "SET_ERROR":
       return { ...state, usersError: action.payload };
-
     default:
       return state;
   }
@@ -69,13 +63,10 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
     const fetchUsers = async () => {
       try {
         dispatch({ type: "SET_LOADING", payload: true });
-
         const res = await fetch(
           "https://jsonplaceholder.typicode.com/users"
         );
-
         if (!res.ok) throw new Error();
-
         const data = await res.json();
         dispatch({ type: "SET_USERS", payload: data });
       } catch {
@@ -87,7 +78,6 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         dispatch({ type: "SET_LOADING", payload: false });
       }
     };
-
     fetchUsers();
   }, []);
 

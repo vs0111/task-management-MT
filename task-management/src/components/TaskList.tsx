@@ -11,41 +11,49 @@ const TaskList = ({ onEdit }: Props) => {
   const { state } = useTaskContext();
   const { tasks } = state;
 
-  // 🔹 Local UI state
-  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<Status | "All">("All");
-  const [priorityFilter, setPriorityFilter] = useState<Priority | "All">("All");
+  const [statusFilter, setStatusFilter] =
+    useState<Status | "All">("All");
+  const [priorityFilter, setPriorityFilter] =
+    useState<Priority | "All">("All");
 
-  // 🔹 Debounce logic (300ms)
+  // Debounce (300ms)
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebouncedSearch(searchTerm);
+      setDebouncedSearch(search);
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchTerm]);
+  }, [search]);
 
-  // 🔹 Derived filtered tasks
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
-      const matchesSearch =
-        task.title.toLowerCase().includes(debouncedSearch.toLowerCase());
+      const matchSearch = task.title
+        .toLowerCase()
+        .includes(debouncedSearch.toLowerCase());
 
-      const matchesStatus =
-        statusFilter === "All" || task.status === statusFilter;
+      const matchStatus =
+        statusFilter === "All" ||
+        task.status === statusFilter;
 
-      const matchesPriority =
-        priorityFilter === "All" || task.priority === priorityFilter;
+      const matchPriority =
+        priorityFilter === "All" ||
+        task.priority === priorityFilter;
 
-      return matchesSearch && matchesStatus && matchesPriority;
+      return matchSearch && matchStatus && matchPriority;
     });
   }, [tasks, debouncedSearch, statusFilter, priorityFilter]);
 
   if (tasks.length === 0) {
     return (
-      <div className="bg-white p-6 rounded shadow text-center text-gray-500">
-        No tasks yet.
+      <div className="bg-white p-8 rounded shadow text-center text-gray-500">
+        <p className="text-lg font-medium">
+          No tasks yet
+        </p>
+        <p className="text-sm">
+          Start by creating your first task.
+        </p>
       </div>
     );
   }
@@ -53,21 +61,17 @@ const TaskList = ({ onEdit }: Props) => {
   return (
     <div className="space-y-6">
 
-      {/* 🔹 Filters Section */}
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-
-        {/* Search */}
+      {/* Controls */}
+      <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between">
         <input
           type="text"
           placeholder="Search by title..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           className="border p-2 rounded w-full md:w-64"
         />
 
         <div className="flex gap-4">
-
-          {/* Status Filter */}
           <select
             value={statusFilter}
             onChange={(e) =>
@@ -77,15 +81,18 @@ const TaskList = ({ onEdit }: Props) => {
           >
             <option value="All">All Status</option>
             <option value="To Do">To Do</option>
-            <option value="In Progress">In Progress</option>
+            <option value="In Progress">
+              In Progress
+            </option>
             <option value="Done">Done</option>
           </select>
 
-          {/* Priority Filter */}
           <select
             value={priorityFilter}
             onChange={(e) =>
-              setPriorityFilter(e.target.value as Priority | "All")
+              setPriorityFilter(
+                e.target.value as Priority | "All"
+              )
             }
             className="border p-2 rounded"
           >
@@ -97,20 +104,29 @@ const TaskList = ({ onEdit }: Props) => {
         </div>
       </div>
 
-      {/* 🔹 Count Display */}
+      {/* Count */}
       <div className="text-sm text-gray-600">
         Showing {filteredTasks.length} of {tasks.length} tasks
       </div>
 
-      {/* 🔹 Cards */}
+      {/* Cards */}
       {filteredTasks.length === 0 ? (
-        <div className="bg-white p-6 rounded shadow text-center text-gray-500">
-          No tasks match your filters.
+        <div className="bg-white p-8 rounded shadow text-center text-gray-500">
+          <p className="text-lg font-medium">
+            No tasks found
+          </p>
+          <p className="text-sm">
+            Try adjusting your filters.
+          </p>
         </div>
       ) : (
         <div className="grid md:grid-cols-3 gap-4">
           {filteredTasks.map((task) => (
-            <TaskCard key={task.id} task={task} onEdit={onEdit} />
+            <TaskCard
+              key={task.id}
+              task={task}
+              onEdit={onEdit}
+            />
           ))}
         </div>
       )}

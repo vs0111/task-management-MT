@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { TaskProvider } from "./context/TaskContext";
+import { ToastProvider } from "./context/ToastContext";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
 import type { Task } from "./types/task";
 
 function Dashboard() {
-  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [editingTask, setEditingTask] =
+    useState<Task | null>(null);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -27,9 +29,11 @@ function Dashboard() {
 
 function App() {
   return (
-    <TaskProvider>
-      <Dashboard />
-    </TaskProvider>
+    <ToastProvider>
+      <TaskProvider>
+        <Dashboard />
+      </TaskProvider>
+    </ToastProvider>
   );
 }
 
