@@ -2,11 +2,10 @@ import { useState } from "react";
 import { TaskProvider } from "./context/TaskContext";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
-import type { Task, Status } from "./types/task";
+import type { Task } from "./types/task";
 
 function Dashboard() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
-  const [activeStatus, setActiveStatus] = useState<Status | "All">("All");
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -20,26 +19,7 @@ function Dashboard() {
           setEditingTask={setEditingTask}
         />
 
-        <div className="flex gap-4 border-b pb-2">
-          {["All", "To Do", "In Progress", "Done"].map((status) => (
-            <button
-              key={status}
-              onClick={() => setActiveStatus(status as any)}
-              className={`px-4 py-2 rounded ${
-                activeStatus === status
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200"
-              }`}
-            >
-              {status}
-            </button>
-          ))}
-        </div>
-
-        <TaskList
-          onEdit={setEditingTask}
-          activeStatus={activeStatus}
-        />
+        <TaskList onEdit={setEditingTask} />
       </div>
     </div>
   );
